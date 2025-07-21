@@ -3,6 +3,9 @@ import { Logo } from './components/Logo'
 import { Menu } from './components/Menu'
 import { CountDown } from './components/CountDown'
 import { DefaultInput } from './components/DefaultInput'
+import { Cycles } from './components/Cycles'
+import { Botao } from './components/Botao'
+import { CirclePlayIcon } from 'lucide-react'
 
 import './styles/theme.css'
 import './styles/global.css'
@@ -38,12 +41,11 @@ export function App() {
           </div>
 
           <div className="formRow">
-            <p>Ciclos</p>
-            <p>0 0 0 0 0 0 0</p>
+            <Cycles></Cycles>
           </div>
 
           <div className="formRow">
-            <button>Enviar</button>
+            <Botao>{<CirclePlayIcon></CirclePlayIcon>}</Botao>
           </div>
 
         </form>
