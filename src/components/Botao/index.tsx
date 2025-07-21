@@ -1,7 +1,4 @@
-
-
 import styles from './styles.module.css'
-import type React from 'react'
 
 interface propsBotao extends React.ComponentProps<'button'> {
     //children: React.ReactNode;

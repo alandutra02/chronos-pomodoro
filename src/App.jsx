@@ -6,6 +6,7 @@ import { DefaultInput } from './components/DefaultInput'
 import { Cycles } from './components/Cycles'
 import { Botao } from './components/Botao'
 import { CirclePlayIcon } from 'lucide-react'
+import { Footer } from './components/Footer'
 
 import './styles/theme.css'
 import './styles/global.css'
@@ -49,6 +50,10 @@ export function App() {
           </div>
 
         </form>
+      </Container>
+
+      <Container>
+        <Footer></Footer>
       </Container>
 
     </>
