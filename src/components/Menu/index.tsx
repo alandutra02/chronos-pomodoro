@@ -12,7 +12,14 @@ export function Menu() {
   ) {
     event.preventDefault()
     console.log('Clicado', Date.now())
+    setTheme(prevTheme => {
+      const nextTheme = prevTheme === 'dark' ? 'light' : 'dark'
+      return nextTheme
+    })
+    document.documentElement.setAttribute('data-theme', theme)
   }
+
+  
   return (
     <nav className={styles.menu}>
       <h1>{theme}</h1>
