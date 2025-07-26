@@ -1,7 +1,6 @@
 import styles from './styles.module.css'
 
 interface propsBotao extends React.ComponentProps<'button'> {
-    //children: React.ReactNode;
     children: React.ReactNode
     color?: 'green' | 'red'
 }
