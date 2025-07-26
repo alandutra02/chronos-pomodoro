@@ -4,9 +4,10 @@ import { Menu } from '../../components/Menu'
 import { Footer } from '../../components/Footer'
 
 
-  interface propsMainTemplate {
-    children: React.ReactNode   
-    }
+interface propsMainTemplate {
+  children: React.ReactNode   
+}
+
 export function MainTemplate({children} : propsMainTemplate) {
 
   return (
@@ -18,7 +19,9 @@ export function MainTemplate({children} : propsMainTemplate) {
       <Container>
         <Menu />
       </Container>
+
         {children}
+
       <Container>
         <Footer></Footer>
       </Container>
