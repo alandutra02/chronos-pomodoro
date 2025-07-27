@@ -2,7 +2,7 @@ import styles from './styles.module.css'
 
 type HeadgingProps = {
   children: React.ReactNode,
-  attr: string
+  //attr: string
 }
 
 export function Heading({ children }:HeadgingProps) {
