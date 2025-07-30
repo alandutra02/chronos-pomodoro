@@ -12,4 +12,3 @@ export interface TaskStateModel {
     longBreakTime: number // MainForm
   };
 };
-
