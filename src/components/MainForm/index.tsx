@@ -2,8 +2,10 @@ import { PlayCircleIcon } from 'lucide-react';
 import { Cycles } from '../Cycles';
 import { Botao } from '../Botao';
 import { DefaultInput } from '../DefaultInput';
+import { useTaskContext } from '../../contexts/TaskContext';
 
 export function MainForm() {
+  const {state} = useTaskContext()
   return (
     <form className='form' action=''>
       <div className='formRow'>
@@ -16,7 +18,7 @@ export function MainForm() {
       </div>
 
       <div className='formRow'>
-        <p>Próximo intervalo é de 25min</p>
+        <p>Próximo intervalo é de {state.config.workTime}min</p>
       </div>
 
       <div className='formRow'>
