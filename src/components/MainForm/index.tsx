@@ -7,6 +7,7 @@ import { useRef } from 'react';
 import type { TaskModel } from '../../models/TaskModel';
 import { getNextCycle } from '../../utils/getNextCycle';
 import { getNextCycleType } from '../../utils/getNextCycleType';
+import { formatSecondsToMinutes } from '../../utils/formatSecondsToMinutes';
 
 export function MainForm() {
   const {state, setState} = useTaskContext()
@@ -48,7 +49,7 @@ export function MainForm() {
         activeTask: newTask,
         currentCycle: nextCycle,
         secondsRemaining, // não precisa por o valor porque esta é uma variável que já teve valor atribuído anteriormente 
-        formattedSecondsRemaining: '00:00', // conferir
+        formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining), // conferir
         tasks: [...prevState.tasks, newTask] // o valor de newTask é inserido dentro do array que foi copidado que é o prevState.tasks
       }
     })
