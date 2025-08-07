@@ -5,11 +5,17 @@ import { DefaultInput } from '../DefaultInput';
 import { useTaskContext } from '../../contexts/TaskContext/useTaskContext';
 import { useRef } from 'react';
 import type { TaskModel } from '../../models/TaskModel';
+import { getNextCycle } from '../../utils/getNextCycle';
+import { getNextCycleType } from '../../utils/getNextCycleType';
 
 export function MainForm() {
   const {state, setState} = useTaskContext()
 
   const taskNameInput = useRef<HTMLInputElement>(null) // aqui está o conteúdo do input chamdado Task
+
+  // ciclos
+  const nextCycle = getNextCycle(state.currentCycle)
+  const nextCycleTyle = getNextCycleType(nextCycle)
 
   function handleCreateNewTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -29,8 +35,8 @@ export function MainForm() {
       startDate: Date.now(),
       completeDate: null,
       interruptDate: null,
-      duration: 1,
-      type: 'workTime'
+      duration: state.config[nextCycleTyle],
+      type: nextCycleTyle
     }
 
     const secondsRemaining = newTask.duration * 60
@@ -40,7 +46,7 @@ export function MainForm() {
         ...prevState,
         config: {...prevState.config},
         activeTask: newTask,
-        currentCycle: 1, // conferir,
+        currentCycle: nextCycle,
         secondsRemaining, // não precisa por o valor porque esta é uma variável que já teve valor atribuído anteriormente 
         formattedSecondsRemaining: '00:00', // conferir
         tasks: [...prevState.tasks, newTask] // o valor de newTask é inserido dentro do array que foi copidado que é o prevState.tasks
@@ -61,7 +67,7 @@ export function MainForm() {
       </div>
 
       <div className='formRow'>
-        <p>Próximo intervalo é de {state.config.workTime}min</p>
+        <p>Próximo intervalo é de {state.activeTask !== null ? state.activeTask.duration:state.config.workTime}min</p>
       </div>
 
       <div className='formRow'>
