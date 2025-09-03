@@ -1,4 +1,4 @@
-import { PlayCircleIcon } from 'lucide-react';
+import { PlayCircleIcon, StopCircleIcon } from 'lucide-react';
 import { Cycles } from '../Cycles';
 import { Botao } from '../Botao';
 import { DefaultInput } from '../DefaultInput';
@@ -7,26 +7,31 @@ import { useRef } from 'react';
 import type { TaskModel } from '../../models/TaskModel';
 import { getNextCycle } from '../../utils/getNextCycle';
 import { getNextCycleType } from '../../utils/getNextCycleType';
-import { formatSecondsToMinutes } from '../../utils/formatSecondsToMinutes';
+import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
+import { Tips } from '../Tips';
+import { showMessage } from '../../adapters/showMessage';
 
 export function MainForm() {
-  const {state, setState} = useTaskContext()
-
+  const {state, dispatch} = useTaskContext()
   const taskNameInput = useRef<HTMLInputElement>(null) // aqui está o conteúdo do input chamdado Task
+  const lastTaskName = state.tasks[state.tasks.length -1]?.name || ''
 
   // ciclos
   const nextCycle = getNextCycle(state.currentCycle)
-  const nextCycleTyle = getNextCycleType(nextCycle)
+  const nextCycleType = getNextCycleType(nextCycle)
+
+
 
   function handleCreateNewTask(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    showMessage.dismiss() // não permite mensagem repetida. Tem que estar logo apos o event.preventDefault()
     
     if(taskNameInput.current === null) return // o .current é o valor de texto do input. Se não tiver conteúdo ele retorna sem fazer nada
 
     const taskName = taskNameInput.current.value // o trim tira os espaços antes de depois da palavra
     
     if (!taskName) {
-      alert('Digite o nome da tarefa')
+      showMessage.warn('Digite o nome da tarefa')
       return // sai do componente
     }
 
@@ -36,23 +41,20 @@ export function MainForm() {
       startDate: Date.now(),
       completeDate: null,
       interruptDate: null,
-      duration: state.config[nextCycleTyle],
-      type: nextCycleTyle
+      duration: state.config[nextCycleType],
+      type: nextCycleType
     }
 
-    const secondsRemaining = newTask.duration * 60
+    dispatch({type: TaskActionTypes.START_TASK, payload: newTask})
 
-    setState(prevState => {
-      return {
-        ...prevState,
-        config: {...prevState.config},
-        activeTask: newTask,
-        currentCycle: nextCycle,
-        secondsRemaining, // não precisa por o valor porque esta é uma variável que já teve valor atribuído anteriormente 
-        formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining), // conferir
-        tasks: [...prevState.tasks, newTask] // o valor de newTask é inserido dentro do array que foi copidado que é o prevState.tasks
-      }
-    })
+    showMessage.success('Tarefa iniciada')
+    
+  }
+
+  function handleInterruptTask() {
+    showMessage.dismiss()
+    showMessage.info('Tarefa interrompida')
+   dispatch({ type: TaskActionTypes.INTERRUPT_TASK });
   }
 
   return (
@@ -62,21 +64,46 @@ export function MainForm() {
           id='meuInput'
           type='text'
           placeholder='Digite algo'
-          ref={taskNameInput}>
+          ref={taskNameInput}
+          disabled={!!state.activeTask}
+          defaultValue={lastTaskName}>  
             task
         </DefaultInput>
       </div>
 
       <div className='formRow'>
-        <p>Próximo intervalo é de {state.activeTask !== null ? state.activeTask.duration:state.config.workTime}min</p>
+        <Tips />
+
+        {/* <p>Próximo intervalo é de {state.config[nextCycleType]}min</p> */}
       </div>
 
+      {state.currentCycle > 0 && (
       <div className='formRow'>
         <Cycles />
       </div>
+      )}
 
       <div className='formRow'>
-        <Botao>{<PlayCircleIcon />}</Botao>
+        {!state.activeTask && (
+          <Botao 
+          aria-label='Iniciar nova tarefa'
+          title='Iniciar nova tarefa'
+          type='submit'
+          key='botao_submit'>
+            {<PlayCircleIcon />}
+          </Botao>
+        )}
+        {state.activeTask && (
+          <Botao 
+          aria-label='Interromper tarefa atual'
+          title='Interromper tarefa atual'
+          type='button' // se for submmit ele vai enviar o formulário novamente, o que não deve acontecer
+          color='red'
+          onClick={handleInterruptTask}
+          key='botao_button'>
+            {<StopCircleIcon />}
+          </Botao>
+        )}
       </div>
     </form>
   );
