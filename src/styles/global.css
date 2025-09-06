@@ -34,3 +34,7 @@ body {
   align-items: center;
   gap: 2.4rem;
 }
+
+input {
+ margin-bottom: 1.9rem;
+}

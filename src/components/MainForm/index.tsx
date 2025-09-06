@@ -10,6 +10,7 @@ import { getNextCycleType } from '../../utils/getNextCycleType';
 import { TaskActionTypes } from '../../contexts/TaskContext/taskActions';
 import { Tips } from '../Tips';
 import { showMessage } from '../../adapters/showMessage';
+import styles from './styles.module.css'
 
 export function MainForm() {
   const {state, dispatch} = useTaskContext()
@@ -58,8 +59,8 @@ export function MainForm() {
   }
 
   return (
-    <form onSubmit={handleCreateNewTask} className='form' action=''>
-      <div className='formRow'>
+    <form onSubmit={handleCreateNewTask} className={styles.form} action=''>
+      <div className={styles.formRow}>
         <DefaultInput
           id='meuInput'
           type='text'
@@ -71,19 +72,19 @@ export function MainForm() {
         </DefaultInput>
       </div>
 
-      <div className='formRow'>
+      <div className={styles.formRow}>
         <Tips />
 
         {/* <p>Próximo intervalo é de {state.config[nextCycleType]}min</p> */}
       </div>
 
       {state.currentCycle > 0 && (
-      <div className='formRow'>
+      <div className={styles.formRow}>
         <Cycles />
       </div>
       )}
 
-      <div className='formRow'>
+      <div className={styles.formRow}>
         {!state.activeTask && (
           <Botao 
           aria-label='Iniciar nova tarefa'
